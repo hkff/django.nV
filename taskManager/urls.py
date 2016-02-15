@@ -14,6 +14,7 @@
 
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from fodtlmon_middleware import urls as fodtlurls
 
 urlpatterns = patterns('',
                        url(r'^$',
@@ -24,4 +25,5 @@ urlpatterns = patterns('',
                                    namespace="taskManager")),
                        url(r'^admin/',
                            include(admin.site.urls)),
+                       url(r'^mon/', include(fodtlurls.urlpatterns)),
                       )
