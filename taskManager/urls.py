@@ -14,7 +14,7 @@
 
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from fodtlmon_middleware import urls as fodtlurls
+from accmon import urls as fodtlurls
 
 urlpatterns = patterns('',
                        url(r'^$',

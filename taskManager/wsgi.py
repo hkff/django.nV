@@ -13,6 +13,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "taskManager.settings")
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 
-from fodtlmon_middleware.sysmon import Sysmon
+from accmon.sysmon import Sysmon
 Sysmon.init()
 import taskManager.rules

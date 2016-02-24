@@ -1,4 +1,4 @@
-from fodtlmon_middleware.sysmon import *
+from accmon.sysmon import *
 from django.contrib.auth.models import User
 
 
@@ -41,3 +41,7 @@ class ReqIn(IPredicate):  # TODO : add to standard lib
 Sysmon.add_http_rule("UserProfile",
                      "G( ![id:UIDL uname:USER req:GET]( ReqIn(r\"taskManager/profile/\", req) => UserEq(id, uname)) )",
                      description="", control_type=Monitor.MonControlType.REAL_TIME)
+
+from accmon.plugins import remote, arduino
+remote.Remote.add_rule("cdroot", "G( ![path:cd]( ~Regex(path, r\"/root/*\")) )")
+arduino.Arduino.add_rule("light", "G( ![x:LIGHT]( Lt(x, '10') ))")

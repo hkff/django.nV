@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fodtlmon_middleware',
+    'accmon',
     'taskManager'
 )
 
@@ -50,7 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'fodtlmon_middleware.middleware.FodtlmonMiddleware'
+    'accmon.middleware.FodtlmonMiddleware'
 )
 
 ROOT_URLCONF = 'taskManager.urls'
