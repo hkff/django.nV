@@ -1,5 +1,12 @@
 from accmon.sysmon import *
 from django.contrib.auth.models import User
+from accmon.plugins import remote, arduino, assertionToolkit
+
+
+################################
+# Register actors
+################################
+Sysmon.register_actor("alice", "https://alice-hkff.c9users.io", 8080)
 
 
 ################################
@@ -19,8 +26,8 @@ Sysmon.add_log_attribute(LogAttribute("Profile_User_id", enabled=True,
 ################################
 class UserEq(IPredicate):
     """ Compare user by id """
-    def eval(self, valuation=None):
-        args2 = super().eval(valuation=valuation)
+    def eval(self, valuation=None, trace=None):
+        args2 = super().eval(valuation=valuation, trace=trace)
         try:
             u1 = User.objects.filter(id=args2[0].name).first()
             u2 = User.objects.filter(username=args2[1].name).first()
@@ -29,19 +36,23 @@ class UserEq(IPredicate):
             return False
 
 
-class ReqIn(IPredicate):  # TODO : add to standard lib
+class ReqIn(IPredicate):
     """ Request regexp """
-    def eval(self, valuation=None):
-        args2 = super().eval(valuation=valuation)
+    def eval(self, valuation=None, trace=None):
+        args2 = super().eval(valuation=valuation, trace=trace)
         return args2[0].name[1:-1] in args2[1].name
 
+
 ################################
-# HTTP rules
+# Monitors
 ################################
 Sysmon.add_http_rule("UserProfile",
                      "G( ![id:UIDL uname:USER req:GET]( ReqIn(r\"taskManager/profile/\", req) => UserEq(id, uname)) )",
                      description="", control_type=Monitor.MonControlType.REAL_TIME)
 
-from accmon.plugins import remote, arduino
+
 remote.Remote.add_rule("cdroot", "G( ![path:cd]( ~Regex(path, r\"/root/*\")) )")
-arduino.Arduino.add_rule("light", "G( ![x:LIGHT]( Lt(x, '10') ))")
+
+arduino.Arduino.add_rule("light", "G( ![x:LIGHT]( Lt(x, '10') ))", violation_formula="F(STOP(0))")
+
+assertionToolkit.AssertionToolkit.add_rule("Intrusion_Detection", "G( ![x:APPLE_Id]( APPLE_Id(x) => F(AAS_Id(x)) ) )", liveness=5)
