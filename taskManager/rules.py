@@ -50,6 +50,9 @@ Sysmon.add_http_rule("UserProfile",
                      "G( ![id:UIDL uname:USER req:GET]( ReqIn(r\"taskManager/profile/\", req) => UserEq(id, uname)) )",
                      description="", control_type=Monitor.MonControlType.REAL_TIME)
 
+Sysmon.add_http_rule("Alice",
+                     "@alice(G( ~ADMIN('root')) )",
+                     description="", control_type=Monitor.MonControlType.POSTERIORI)
 
 remote.Remote.add_rule("cdroot", "G( ![path:cd]( ~Regex(path, r\"/root/*\")) )")
 
